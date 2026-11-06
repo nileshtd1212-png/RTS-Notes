@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 0;
+        }
+
+        .input-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            background-color: white;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-save {
+            grid-column: 1 / -1;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-save:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .info span {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .required::after {
+            content: " *";
+            color: red;
+        }
+
+        .date-display {
+            grid-column: 1 / -1;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .comment-text {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .comment-text.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 My Notes</h1>
+        
+        <div class="form-grid">
+            <div class="date-display">
+                📅 Date: <span id="currentDate"></span>
+            </div>
+            
+            <div class="input-group">
+                <label for="nameOfFarmer" class="required">Name Of Farmer</label>
+                <input type="text" id="nameOfFarmer" placeholder="Enter farmer name">
+            </div>
+            
+            <div class="input-group">
+                <label for="gutNumber">Gut Number</label>
+                <input type="text" id="gutNumber" placeholder="Enter gut number">
+            </div>
+            
+            <div class="input-group">
+                <label for="villageName">Village Name</label>
+                <input type="text" id="villageName" placeholder="Enter village name">
+            </div>
+            
+            <div class="input-group">
+                <label for="project">Project</label>
+                <select id="project">
+                    <option value="">Select Project</option>
+                    <option value="Takali Dolhari Medium Project">1. Takali Dolhari Medium Project</option>
+                    <option value="Antargaon MI Tank">2. Antargaon MI Tank</option>
+                    <option value="Mahagaon MI Tank">3. Mahagaon MI Tank</option>
+                    <option value="Kumbharpind MI Tank">4. Kumbharpind MI Tank</option>
+                </select>
+            </div>
+            
+<div class="input-group">
+                <label for="actionTaken">Action Taken</label>
+                <select id="actionTaken">
+                    <option value="">Select Action Taken</option>
+                    <option value="Forwarded">1. Forwarded</option>
+                    <option value="Back To Citizen">2. Back To Citizen</option>
+                    <option value="Rejected">3. Rejected</option>
+                    <option value="Application Transferred">4. Application Transferred</option>
+                </select>
+            </div>
+            
+            <div class="input-group full-width">
+                <label for="commentSelect">Comment</label>
+                <select id="commentSelect" onchange="handleCommentChange()">
+                    <option value="">Select Comment</option>
+                    <option value="Lies in Command Area">Lies in Command Area</option>
+                    <option value="Does Not Lie in Command Area">Does Not Lie in Command Area</option>
+                    <option value="Comment">Comment</option>
+                </select>
+                <input type="text" id="commentText" class="comment-text" placeholder="Enter comment">
+            </div>
+            
+            <button class="btn-save" onclick="saveNote()">💾 Save Note</button>
+        </div>
+        
+        <div id="message" class="message"></div>
+        
+        <div class="info">
+            Notes are saved to: <span>Google Sheet</span>
+        </div>
+    </div>
+
+    <script>
+        // Display current date
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        document.getElementById('currentDate').textContent = day + '-' + month + '-' + year;
+        
+async function saveNote() {
+            const nameOfFarmer = document.getElementById('nameOfFarmer').value;
+            const gutNumber = document.getElementById('gutNumber').value;
+            const villageName = document.getElementById('villageName').value;
+            const project = document.getElementById('project').value;
+            const actionTaken = document.getElementById('actionTaken').value;
+            const commentSelect = document.getElementById('commentSelect').value;
+            const commentText = document.getElementById('commentText').value;
+            const comment = commentSelect === 'Comment' ? commentText : commentSelect;
+            const messageDiv = document.getElementById('message');
+            const date = document.getElementById('currentDate').textContent;
+            
+            if (!nameOfFarmer.trim()) {
+                showMessage('Please enter Name Of Farmer!', 'error');
+                return;
+            }
+            
+            try {
+                console.log('Sending data to Google Sheet...');
+                const response = await fetch('https://script.google.com/macros/s/AKfycbyUQE3QTmDV9S2NVRYboz8C_bGGuZU5-_Rmb9XDSTLEp5SOKMxUWFUFKfy12d-TFdUDlQ/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nameOfFarmer: nameOfFarmer,
+                        gutNumber: gutNumber,
+                        villageName: villageName,
+                        project: project,
+                        actionTaken: actionTaken,
+                        comment: comment,
+                        date: date
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    showMessage('✅ ' + data.message, 'success');
+                    // Clear all fields
+                    document.getElementById('nameOfFarmer').value = '';
+                    document.getElementById('gutNumber').value = '';
+                    document.getElementById('villageName').value = '';
+                    document.getElementById('project').value = '';
+                    document.getElementById('actionTaken').value = '';
+                    document.getElementById('commentSelect').value = '';
+                    document.getElementById('commentText').value = '';
+                    document.getElementById('commentText').classList.remove('visible');
+                } else {
+                    showMessage('❌ ' + data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('❌ Error: Could not save to Google Sheet. Please check your connection.', 'error');
+            }
+        }
+        
+        function handleCommentChange() {
+            const commentSelect = document.getElementById('commentSelect').value;
+            const commentText = document.getElementById('commentText');
+            if (commentSelect === 'Comment') {
+                commentText.classList.add('visible');
+            } else {
+                commentText.classList.remove('visible');
+                commentText.value = '';
+            }
+        }
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = 'message ' + type;
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                messageDiv.className = 'message';
+            }, 3000);
+        }
+        
+        // Allow saving with Ctrl+Enter
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                saveNote();
+            }
+        });
+    </script>
+</body>
+</html>
+
